@@ -81,7 +81,7 @@ vi.mock("@/features/render-frequency-audio", () => ({
 }));
 
 describe("WishGeneratorWidget", () => {
-  it("submits a wish and renders the result card", async () => {
+  it("submits a wish and renders the resonance result", async () => {
     render(<WishGeneratorWidget />);
 
     fireEvent.change(screen.getByLabelText("당신의 소원"), {
@@ -90,7 +90,7 @@ describe("WishGeneratorWidget", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "나만의 주파수 만들기" }));
+    fireEvent.click(screen.getByRole("button", { name: "내 주파수 열기" }));
 
     await waitFor(() => {
       expect(screen.getByText("부드러운 존재감을 위한 주파수")).toBeInTheDocument();

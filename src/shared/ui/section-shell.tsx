@@ -5,5 +5,5 @@ export function SectionShell({
   children: React.ReactNode;
   className?: string;
 }>) {
-  return <section className={`moon-card ${className}`.trim()}>{children}</section>;
+  return <section className={className.trim()}>{children}</section>;
 }
