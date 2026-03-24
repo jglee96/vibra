@@ -14,7 +14,45 @@ vi.mock("@/features/submit-wish/api/request-frequency", () => ({
       energy: "low",
       imagery: ["달빛", "안개", "잔광"],
     },
+    description: "매력과 안정감을 부드럽게 유지하는 방향으로 감정을 구조화했어요.",
     listeningGuide: "잠들기 전 조용한 공간에서 낮은 볼륨으로 들어보세요.",
+    wishEmotionProfile: {
+      emotionLabels: ["고요함", "자신감", "여운"],
+      vad: {
+        valence: 0.64,
+        arousal: 0.36,
+      },
+      dominance: 0.57,
+      intent: ["매력", "존재감", "부드러운 자신감"],
+      imagery: ["달빛", "안개", "잔광"],
+      ambiguity: 0.12,
+      confidence: 0.82,
+      language: "ko",
+    },
+    regulationTarget: "soothe",
+    musicControlProfile: {
+      targetVad: {
+        valence: 0.61,
+        arousal: 0.31,
+      },
+      tempoDensity: "still",
+      modeColor: "minor",
+      spectralBrightness: "balanced",
+      rhythmicPulse: "none",
+      spaciousness: "wide",
+    },
+    evidenceTrace: [
+      {
+        source: "llm_rationale",
+        note: "매력과 안정감을 부드럽게 유지하는 방향으로 감정을 구조화했어요.",
+        confidence: 0.82,
+      },
+      {
+        source: "regulation_rule",
+        note: "현재 valence 0.64, arousal 0.36, dominance 0.57를 기준으로 soothe 방향을 선택했어요.",
+        confidence: 0.78,
+      },
+    ],
     audioRecipe: {
       durationSec: 180,
       baseHz: 142,

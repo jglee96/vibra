@@ -1,4 +1,4 @@
-import type { Analysis, AudioRecipe } from "@/entities/frequency";
+import type { Analysis, AudioRecipe, RegulationTarget } from "@/entities/frequency";
 
 const toneLabelMap: Record<Analysis["tone"], string> = {
   calm: "고요한 정렬",
@@ -13,6 +13,17 @@ export function getToneLabel(tone: Analysis["tone"]) {
 
 export function getEnergyLabel(energy: Analysis["energy"]) {
   return energy === "medium" ? "중간 결" : "낮은 결";
+}
+
+const regulationTargetLabelMap: Record<RegulationTarget, string> = {
+  focus: "집중 유지",
+  soothe: "긴장 완화",
+  stabilize: "감정 안정",
+  uplift: "완만한 상승",
+};
+
+export function getRegulationTargetLabel(regulationTarget: RegulationTarget) {
+  return regulationTargetLabelMap[regulationTarget];
 }
 
 export function getRecipeSummary(recipe: AudioRecipe) {

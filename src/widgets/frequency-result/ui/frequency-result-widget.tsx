@@ -5,6 +5,7 @@ import { useRenderedFrequencyAudio } from "@/features/render-frequency-audio";
 import {
   getEnergyLabel,
   getRecipeSummary,
+  getRegulationTargetLabel,
   getToneLabel,
 } from "@/widgets/frequency-result/model/get-tone-label";
 
@@ -41,12 +42,37 @@ export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidget
           </p>
         </div>
         <div className="moon-panel">
+          <h3 className="moon-section-title">감정 엔진 해석</h3>
+          <p>{result.description}</p>
+        </div>
+      </div>
+
+      <div className="moon-section-grid">
+        <div className="moon-panel">
+          <h3 className="moon-section-title">정서 프로필</h3>
+          <p>
+            {result.wishEmotionProfile.emotionLabels.join(", ")} 축으로 읽었고, valence{" "}
+            {result.wishEmotionProfile.vad.valence.toFixed(2)}, arousal{" "}
+            {result.wishEmotionProfile.vad.arousal.toFixed(2)}, dominance{" "}
+            {result.wishEmotionProfile.dominance.toFixed(2)}로 정규화했어요.
+          </p>
+          <p className="moon-quiet">
+            language {result.wishEmotionProfile.language} · ambiguity{" "}
+            {result.wishEmotionProfile.ambiguity.toFixed(2)} · confidence{" "}
+            {result.wishEmotionProfile.confidence.toFixed(2)}
+          </p>
+        </div>
+        <div className="moon-panel">
           <h3 className="moon-section-title">추천 청취 상황</h3>
           <p>{result.listeningGuide}</p>
         </div>
       </div>
 
       <div className="moon-meta-grid" aria-label="공명 메타 정보">
+        <div className="moon-meta-card">
+          <strong>조절 방향</strong>
+          <span>{getRegulationTargetLabel(result.regulationTarget)}</span>
+        </div>
         <div className="moon-meta-card">
           <strong>톤</strong>
           <span>{getToneLabel(result.analysis.tone)}</span>
@@ -59,6 +85,11 @@ export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidget
           <strong>오디오 공식</strong>
           <span>{getRecipeSummary(result.audioRecipe)}</span>
         </div>
+      </div>
+
+      <div className="moon-panel">
+        <h3 className="moon-section-title">엔진 근거</h3>
+        <p>{result.evidenceTrace.map((trace) => trace.note).join(" ")}</p>
       </div>
 
       <div className="moon-audio-panel">

@@ -1,11 +1,11 @@
-import type { AiWishAnalysis, AudioRecipe } from "@/entities/frequency/model/frequency";
+import type { AudioHints, AudioRecipe } from "@/entities/frequency/model/frequency";
 import { clamp } from "@/shared/lib/clamp";
 
 function rounded(value: number) {
   return Number(value.toFixed(3));
 }
 
-export function normalizeAudioRecipe(input: AiWishAnalysis["audioHints"]): AudioRecipe {
+export function normalizeAudioRecipe(input: AudioHints): AudioRecipe {
   const baseHz = rounded(clamp(input.baseHz, 108, 196));
   const binauralOffsetHz = rounded(clamp(input.binauralOffsetHz, 1.5, 8));
   const pulseHz =
