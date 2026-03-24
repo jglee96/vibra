@@ -3,12 +3,15 @@
 import type { FrequencyResult } from "@/entities/frequency";
 import { useRenderedFrequencyAudio } from "@/features/render-frequency-audio";
 import {
-  lineBorder,
+  errorPanel,
+  glassCard,
+  overlayPanel,
   primaryButton,
   secondaryButton,
-  textMuted,
+  subtleBorder,
   textPrimary,
   textSecondary,
+  textTertiary,
 } from "@/shared/ui/tailwind";
 import {
   getEnergyLabel,
@@ -21,32 +24,37 @@ type FrequencyResultWidgetProps = {
   result: FrequencyResult;
 };
 
-export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidgetProps>) {
+export function FrequencyResultWidget({
+  result,
+}: Readonly<FrequencyResultWidgetProps>) {
   const audio = useRenderedFrequencyAudio(result);
 
   return (
-    <section className={`grid gap-8 border-t pt-10 ${lineBorder}`} aria-live="polite">
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.72fr)] lg:items-end">
+    <section
+      className={`${glassCard} grid gap-4 p-5 sm:p-[1.3rem]`}
+      aria-live="polite"
+    >
+      <div
+        className={`m-0 text-[0.78rem] font-semibold uppercase tracking-[0.04em] ${textTertiary}`}
+      >
+        당신의 공명 결과
+      </div>
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p
-            className={`m-0 text-[0.72rem] font-semibold uppercase tracking-[0.28em] ${textMuted}`}
-          >
-            Resonance
-          </p>
           <h2
-            className={`mt-4 mb-0 font-serif text-[clamp(2rem,4.6vw,4rem)] leading-[0.98] tracking-[-0.045em] ${textPrimary}`}
+            className={`m-0 text-[clamp(1.8rem,3vw,2.6rem)] leading-[1.08] font-semibold tracking-[-0.03em] ${textPrimary}`}
           >
             {result.title}
           </h2>
-          <p className={`mt-4 mb-0 max-w-[38rem] text-base leading-8 ${textSecondary}`}>
+          <p className={`mt-[0.45rem] mb-0 leading-[1.7] ${textSecondary}`}>
             {result.subtitle}
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-[0.55rem]">
           {result.analysis.intentKeywords.map((keyword) => (
             <span
               key={keyword}
-              className={`rounded-full border px-4 py-2 text-sm ${lineBorder} ${textSecondary} bg-[rgba(255,255,255,0.04)]`}
+              className="rounded-full border border-[rgba(110,128,160,0.18)] bg-[rgba(93,121,201,0.14)] px-[0.8rem] py-[0.45rem] text-[0.9rem] font-medium text-[#4763b6] dark:border-[rgba(176,202,255,0.16)] dark:bg-[rgba(157,189,255,0.12)] dark:text-[#d7e6ff]"
             >
               {keyword}
             </span>
@@ -54,96 +62,79 @@ export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidget
         </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <div>
-          <h3 className={`m-0 text-lg ${textPrimary}`}>깊게 스며드는 분위기</h3>
-          <p className={`mt-4 mb-0 text-base leading-8 ${textSecondary}`}>
-            {result.description} {result.analysis.moodKeywords.join(", ")}의 결 위에{" "}
-            {result.analysis.imagery.join(", ")} 장면을 얹어 오래 머무는 파장으로 정리했습니다.
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className={`${overlayPanel} p-4`}>
+          <h3
+            className={`m-0 text-base font-semibold tracking-[0.01em] ${textPrimary}`}
+          >
+            분석된 결
+          </h3>
+          <p className={`mt-3 mb-0 leading-[1.75] ${textSecondary}`}>
+            {result.analysis.moodKeywords.join(", ")}의 감정을 중심으로 장면을
+            정리했고, {result.analysis.imagery.join(", ")} 이미지를 사용해
+            오디오의 질감을 잡았습니다.
           </p>
         </div>
-        <div>
-          <h3 className={`m-0 text-lg ${textPrimary}`}>이 밤에 가장 잘 맞는 순간</h3>
-          <p className={`mt-4 mb-0 text-base leading-8 ${textSecondary}`}>
+        <div className={`${overlayPanel} p-4`}>
+          <h3
+            className={`m-0 text-base font-semibold tracking-[0.01em] ${textPrimary}`}
+          >
+            추천 청취 상황
+          </h3>
+          <p className={`mt-3 mb-0 leading-[1.75] ${textSecondary}`}>
             {result.listeningGuide}
           </p>
         </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <div>
-          <h3 className={`m-0 text-lg ${textPrimary}`}>붙기 시작하는 감각</h3>
-          <p className={`mt-4 mb-0 text-base leading-8 ${textSecondary}`}>
-            {result.wishEmotionProfile.emotionLabels.join(", ")} 흐름 위에{" "}
-            {result.wishEmotionProfile.intent.join(", ")} 무드를 얹었습니다. 설명보다 먼저 마음의
-            속도와 표정이 바뀌는 쪽에 가깝습니다.
-          </p>
+      <div className="moon-meta-grid" aria-label="공명 메타 정보">
+        <div className="moon-meta-card">
+          <strong>톤</strong>
+          <span>{getToneLabel(result.analysis.tone)}</span>
         </div>
-        <div>
-          <h3 className={`m-0 text-lg ${textPrimary}`}>남기고 싶은 여운</h3>
-          <p className={`mt-4 mb-0 text-base leading-8 ${textSecondary}`}>
-            {result.evidenceTrace.map((trace) => trace.note).join(" ")}
-          </p>
-        </div>
-      </div>
-
-      <div
-        className={`grid gap-4 border-y py-6 sm:grid-cols-2 xl:grid-cols-4 ${lineBorder}`}
-        aria-label="공명 메타 정보"
-      >
-        <div>
-          <strong className={`block text-[0.72rem] uppercase tracking-[0.22em] ${textMuted}`}>
-            조율
-          </strong>
-          <span className={`mt-2 block text-base leading-7 ${textPrimary}`}>
-            {getRegulationTargetLabel(result.regulationTarget)}
-          </span>
-        </div>
-        <div>
-          <strong className={`block text-[0.72rem] uppercase tracking-[0.22em] ${textMuted}`}>
-            톤
-          </strong>
-          <span className={`mt-2 block text-base leading-7 ${textPrimary}`}>
-            {getToneLabel(result.analysis.tone)}
-          </span>
-        </div>
-        <div>
-          <strong className={`block text-[0.72rem] uppercase tracking-[0.22em] ${textMuted}`}>
+        <div className={`${overlayPanel} rounded-[18px] p-[0.95rem]`}>
+          <strong
+            className={`mb-[0.2rem] block text-[0.8rem] uppercase tracking-[0.08em] ${textTertiary}`}
+          >
             에너지
           </strong>
-          <span className={`mt-2 block text-base leading-7 ${textPrimary}`}>
+          <span className={`leading-6 ${textPrimary}`}>
             {getEnergyLabel(result.analysis.energy)}
           </span>
         </div>
-        <div>
-          <strong className={`block text-[0.72rem] uppercase tracking-[0.22em] ${textMuted}`}>
-            파장 공식
+        <div className={`${overlayPanel} rounded-[18px] p-[0.95rem]`}>
+          <strong
+            className={`mb-[0.2rem] block text-[0.8rem] uppercase tracking-[0.08em] ${textTertiary}`}
+          >
+            오디오 공식
           </strong>
-          <span className={`mt-2 block text-base leading-7 ${textPrimary}`}>
+          <span className={`leading-6 ${textPrimary}`}>
             {getRecipeSummary(result.audioRecipe)}
           </span>
         </div>
       </div>
 
-      <div
-        className={`rounded-[2rem] border p-6 sm:p-8 ${lineBorder} bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))]`}
-      >
-        <div className="flex flex-wrap items-start justify-between gap-5">
+      <div className="moon-panel">
+        <h3 className="moon-section-title">엔진 근거</h3>
+        <p>{result.evidenceTrace.map((trace) => trace.note).join(" ")}</p>
+      </div>
+
+      <div className="grid gap-4 rounded-[24px] border border-[rgba(110,128,160,0.18)] bg-[radial-gradient(circle_at_top,rgba(93,121,201,0.14),transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.74))] p-[1.1rem] shadow-[0_24px_60px_rgba(134,148,176,0.16)] dark:border-[rgba(176,202,255,0.16)] dark:bg-[radial-gradient(circle_at_top,rgba(157,189,255,0.12),transparent_58%),linear-gradient(180deg,rgba(13,22,38,0.9),rgba(13,22,38,0.74))] dark:shadow-[0_28px_70px_rgba(1,7,20,0.34)]">
+        <div className="flex flex-wrap items-start justify-between gap-[0.8rem]">
           <div>
-            <p className={`m-0 text-[0.72rem] uppercase tracking-[0.28em] ${textMuted}`}>
-              Playback
-            </p>
-            <h3 className={`mt-3 mb-0 text-[clamp(1.35rem,3vw,2.2rem)] ${textPrimary}`}>
-              지금 이 파장을 틀어두세요
+            <h3
+              className={`m-0 text-base font-semibold tracking-[0.01em] ${textPrimary}`}
+            >
+              당신의 주파수
             </h3>
-            <p className={`mt-4 mb-0 max-w-[34rem] text-base leading-8 ${textSecondary}`}>
+            <p className={`mt-3 mb-0 leading-[1.65] ${textSecondary}`}>
               {audio.isRendering
                 ? "브라우저 안에서 당신만의 소리를 열고 있어요. 곧 바로 이 밤의 공기가 바뀌기 시작합니다."
                 : "처음엔 낮은 볼륨으로 재생해두세요. 조용한 순간일수록 파장은 더 깊게 붙습니다."}
             </p>
           </div>
           <span
-            className={`inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-semibold ${lineBorder} ${textSecondary} bg-[rgba(255,255,255,0.04)]`}
+            className={`inline-flex min-h-8 items-center rounded-full border px-[0.7rem] py-[0.35rem] text-[0.85rem] font-semibold ${subtleBorder} ${textSecondary} bg-[rgba(255,255,255,0.58)] dark:bg-[rgba(255,255,255,0.04)]`}
           >
             {audio.url ? "재생 준비 완료" : "오디오 생성 중"}
           </span>
@@ -153,17 +144,15 @@ export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidget
             ? "브라우저에서 mp3를 만들고 있어요. 잠시만 기다리면 바로 재생할 수 있어요."
             : "조용한 공간에서 낮은 볼륨으로 먼저 들어보세요."}
         </p>
-        {audio.error ? (
-          <p className="mt-6 rounded-[1.25rem] border border-[rgba(255,169,181,0.28)] bg-[rgba(120,24,42,0.34)] px-4 py-3 leading-6 text-[#ffd8df]">
-            {audio.error}
-          </p>
+        {audio.error ? <p className={errorPanel}>{audio.error}</p> : null}
+        {audio.url ? (
+          <audio className="w-full" controls src={audio.url} />
         ) : null}
-        {audio.url ? <audio className="mt-6 w-full" controls src={audio.url} /> : null}
-        <div
-          className={`mt-6 flex flex-wrap items-stretch justify-between gap-4 border-t pt-5 sm:items-center ${lineBorder}`}
-        >
-          <span className={`text-sm leading-7 ${textSecondary}`}>
-            {audio.url ? "생성이 완료되었어요." : "첫 생성에는 약간 더 시간이 걸릴 수 있어요."}
+        <div className="flex flex-wrap items-stretch justify-between gap-[0.9rem] sm:items-center">
+          <span className={`leading-[1.65] ${textSecondary}`}>
+            {audio.url
+              ? "생성이 완료되었어요."
+              : "첫 생성에는 약간 더 시간이 걸릴 수 있어요."}
           </span>
           {audio.url && audio.fileName ? (
             <a
@@ -174,7 +163,11 @@ export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidget
               MP3 다운로드
             </a>
           ) : (
-            <button className={`${primaryButton} w-full sm:w-auto`} type="button" disabled>
+            <button
+              className={`${primaryButton} w-full sm:w-auto`}
+              type="button"
+              disabled
+            >
               MP3 준비 중...
             </button>
           )}

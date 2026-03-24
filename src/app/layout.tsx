@@ -13,8 +13,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="bg-[#060816]">
-      <body className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(120,156,255,0.22),transparent_0_34%),radial-gradient(circle_at_82%_12%,rgba(255,214,160,0.12),transparent_0_24%),radial-gradient(circle_at_20%_78%,rgba(118,92,255,0.12),transparent_0_28%),linear-gradient(180deg,#060816_0%,#0d1230_48%,#090b16_100%)] font-sans text-[#f7f4ee] antialiased">
+    <html
+      lang="ko"
+      className="scheme-light-dark bg-[radial-gradient(circle_at_50%_10%,rgba(153,180,255,0.26),transparent_22%),linear-gradient(180deg,#f7f9fd_0%,#f5f7fb_100%)] dark:bg-[radial-gradient(circle_at_50%_10%,rgba(130,158,255,0.2),transparent_22%),linear-gradient(180deg,#091221_0%,#07111f_100%)]"
+    >
+      <body className="min-h-screen bg-[radial-gradient(circle_at_50%_0%,rgba(153,180,255,0.26),transparent_34%),radial-gradient(circle_at_100%_100%,rgba(93,121,201,0.18),transparent_34%),linear-gradient(180deg,#f7f9fd_0%,#f5f7fb_100%)] font-sans text-[#172033] antialiased dark:bg-[radial-gradient(circle_at_50%_0%,rgba(130,158,255,0.2),transparent_34%),radial-gradient(circle_at_100%_100%,rgba(157,189,255,0.12),transparent_34%),linear-gradient(180deg,#091221_0%,#07111f_100%)] dark:text-[#f2f6ff]">
         {children}
       </body>
     </html>

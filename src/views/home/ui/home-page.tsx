@@ -1,67 +1,53 @@
-import { lineBorder, textMuted, textPrimary, textSecondary } from "@/shared/ui/tailwind";
+import {
+  softPanel,
+  textPrimary,
+  textSecondary,
+  textTertiary,
+} from "@/shared/ui/tailwind";
 import { WishGeneratorWidget } from "@/widgets/wish-generator";
 
 export function HomePage() {
   return (
-    <main className="relative isolate min-h-screen overflow-hidden">
-      <div className="pointer-events-none absolute inset-x-0 top-[-6rem] h-[32rem] bg-[radial-gradient(circle,rgba(155,182,255,0.22),transparent_60%)] blur-3xl motion-safe:animate-[pulse_10s_ease-in-out_infinite]" />
-      <div className="pointer-events-none absolute bottom-[-10rem] right-[-6rem] h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(255,214,160,0.12),transparent_66%)] blur-3xl" />
-      <div className="relative mx-auto flex min-h-screen w-full max-w-[1280px] flex-col px-4 pb-20 pt-8 sm:px-6 lg:px-10">
-        <section className="grid min-h-[72svh] items-end gap-12 pb-12 pt-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(20rem,0.7fr)]">
-          <div className="max-w-[48rem]">
-            <p
-              className={`mb-5 text-[0.72rem] font-semibold uppercase tracking-[0.38em] ${textMuted}`}
-            >
-              VIBRA
-            </p>
+    <main className="relative min-h-screen overflow-hidden before:pointer-events-none before:absolute before:left-1/2 before:top-8 before:h-[min(34rem,72vw)] before:w-[min(34rem,72vw)] before:-translate-x-1/2 before:rounded-full before:bg-[radial-gradient(circle,rgba(168,193,255,0.86),transparent_70%)] before:opacity-[0.88] before:blur-[18px] before:content-[''] after:pointer-events-none after:absolute after:bottom-[-8rem] after:right-[-10rem] after:size-96 after:rounded-full after:bg-[radial-gradient(circle,rgba(93,121,201,0.18),transparent_72%)] after:opacity-[0.55] after:blur-[32px] after:content-[''] dark:before:bg-[radial-gradient(circle,rgba(130,158,255,0.24),transparent_70%)] dark:after:bg-[radial-gradient(circle,rgba(157,189,255,0.16),transparent_72%)] motion-safe:before:animate-[pulse_12s_ease-in-out_infinite]">
+      <div className="relative z-10 mx-auto w-full max-w-[1120px] px-4 pt-6 pb-10 sm:px-5 sm:pb-16">
+        <section className="grid gap-4 py-7 sm:py-10 sm:pb-6">
+          <p
+            className={`m-0 text-[0.78rem] font-semibold uppercase tracking-[0.04em] ${textTertiary}`}
+          >
+            조용한 공명 스튜디오
+          </p>
+          <div className="grid items-end gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(260px,0.8fr)]">
             <div>
               <h1
-                className={`m-0 max-w-[11ch] font-serif text-[clamp(3.4rem,9vw,7.4rem)] leading-[0.94] tracking-[-0.055em] ${textPrimary}`}
+                className={`m-0 max-w-[12ch] text-[clamp(2.6rem,6vw,4.75rem)] leading-[1.02] font-bold tracking-[-0.045em] lg:max-w-[11ch] ${textPrimary}`}
               >
-                모든 것을 끌어당기는 밤의 주파수
+                소원을 차분한 주파수로 정리하는 공간
               </h1>
-              <p className={`mt-6 mb-0 max-w-[38rem] text-lg leading-[1.9] ${textSecondary}`}>
-                사랑도, 돈도, 기회도 먼저 내 쪽으로 흐르기 시작하는 밤. 원하는 현실을 한 줄로 적으면
-                Vibra가 그 감각을 먼저 울려줍니다.
+              <p
+                className={`mt-4 mb-0 max-w-[40rem] text-base leading-[1.7] ${textSecondary}`}
+              >
+                바라는 변화를 한 문장으로 적어주세요. Vibra가 감정의 결을 읽고,
+                조용히 몰입할 수 있는 3분 오디오로 정리해드립니다.
               </p>
             </div>
-          </div>
-          <dl className={`border-t ${lineBorder}`} aria-label="서비스 핵심 약속">
-            <div className={`border-b py-5 ${lineBorder}`}>
-              <dt className={`mb-2 text-[0.72rem] uppercase tracking-[0.24em] ${textMuted}`}>
-                관계
-              </dt>
-              <dd className={`m-0 text-lg leading-8 ${textSecondary}`}>
-                사람이 먼저 다정해지는 공기
-              </dd>
-            </div>
-            <div className={`border-b py-5 ${lineBorder}`}>
-              <dt className={`mb-2 text-[0.72rem] uppercase tracking-[0.24em] ${textMuted}`}>
-                흐름
-              </dt>
-              <dd className={`m-0 text-lg leading-8 ${textSecondary}`}>돈이 가볍게 붙는 리듬</dd>
-            </div>
-            <div className={`py-5 ${lineBorder}`}>
-              <dt className={`mb-2 text-[0.72rem] uppercase tracking-[0.24em] ${textMuted}`}>
-                존재감
-              </dt>
-              <dd className={`m-0 text-lg leading-8 ${textSecondary}`}>
-                기회가 자연스럽게 머무는 분위기
-              </dd>
-            </div>
-          </dl>
-        </section>
-        <section className={`border-t pt-8 sm:pt-10 ${lineBorder}`}>
-          <div className="grid gap-6 sm:grid-cols-3">
-            <p className={`m-0 text-sm leading-7 ${textMuted}`}>
-              설명보다 먼저 몸이 믿는 쪽으로 밤의 공기를 바꿉니다.
-            </p>
-            <p className={`m-0 text-sm leading-7 ${textMuted}`}>
-              한 줄이면 충분해요. 이미 가진 사람의 온도로 적어보세요.
-            </p>
-            <p className={`m-0 text-sm leading-7 ${textMuted}`}>
-              재생이 시작되는 순간, 내일의 표정과 속도가 먼저 달라집니다.
-            </p>
+            <dl className="m-0 grid gap-3" aria-label="서비스 핵심 정보">
+              <div className={`${softPanel} rounded-[20px] px-4 py-[1.05rem]`}>
+                <dt className={`text-[0.82rem] font-semibold ${textTertiary}`}>
+                  세션 기반
+                </dt>
+                <dd className={`mt-[0.35rem] ml-0 leading-6 ${textPrimary}`}>
+                  기록 없이 지금 이 화면에서만 생성
+                </dd>
+              </div>
+              <div className={`${softPanel} rounded-[20px] px-4 py-[1.05rem]`}>
+                <dt className={`text-[0.82rem] font-semibold ${textTertiary}`}>
+                  3분 길이
+                </dt>
+                <dd className={`mt-[0.35rem] ml-0 leading-6 ${textPrimary}`}>
+                  짧고 반복 가능한 개인 청취 리추얼
+                </dd>
+              </div>
+            </dl>
           </div>
         </section>
         <WishGeneratorWidget />

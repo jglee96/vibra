@@ -1,3 +1,5 @@
+import { glassCard } from "@/shared/ui/tailwind";
+
 export function SectionShell({
   children,
   className = "",
@@ -5,5 +7,7 @@ export function SectionShell({
   children: React.ReactNode;
   className?: string;
 }>) {
-  return <section className={className.trim()}>{children}</section>;
+  return (
+    <section className={`${glassCard} ${className}`.trim()}>{children}</section>
+  );
 }
