@@ -1,9 +1,33 @@
-.next
-node_modules
-coverage
-playwright-report
-test-results
-pnpm-lock.yaml
+# dependencies
+node_modules/
+.pnpm/
+.pnpm-store/
 
-# .env
-.env.local
+# next.js
+.next/
+out/
+
+# build caches
+coverage/
+dist/
+*.tsbuildinfo
+
+# test artifacts
+playwright-report/
+test-results/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# env files
+.env*
+!.env.example
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/
