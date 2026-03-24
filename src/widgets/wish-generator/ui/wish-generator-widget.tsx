@@ -11,9 +11,18 @@ export function WishGeneratorWidget() {
   const { error, isPending, result, submitWish } = useSubmitWish();
 
   return (
-    <div className="moon-grid">
-      <div>
+    <div className="moon-layout">
+      <div className="moon-main-column">
         <section className="moon-card moon-card--form">
+          <div className="moon-card-heading">
+            <div>
+              <p className="moon-section-kicker">입력</p>
+              <h2 className="moon-card-title">당신의 바람을 또렷하게 남겨주세요</h2>
+            </div>
+            <p className="moon-card-copy">
+              구체적인 장면과 감정을 함께 적을수록 더 안정적인 공명 패턴을 만들 수 있어요.
+            </p>
+          </div>
           <SubmitWishForm
             error={error}
             isPending={isPending}
@@ -22,7 +31,7 @@ export function WishGeneratorWidget() {
             value={wish}
           />
           {isPending ? (
-            <div className="moon-process" aria-live="polite">
+            <div className="moon-process" aria-live="polite" aria-label="생성 진행 상태">
               {generationSteps.map((step, index) => (
                 <div
                   key={step}
@@ -39,16 +48,26 @@ export function WishGeneratorWidget() {
         {result ? <FrequencyResultWidget result={result} /> : null}
       </div>
       <aside className="moon-card moon-card--aside">
-        <h2 className="moon-aside-title">의식의 작동 방식</h2>
-        <ol className="moon-list">
-          <li>소원 속 감정, 방향성, 분위기를 OpenAI가 구조화된 키워드로 해석합니다.</li>
-          <li>
-            해석된 결을 바탕으로 브라우저에서 만들 수 있는 주파수 공식을 안전한 파라미터로
-            조립합니다.
-          </li>
-          <li>당신의 기기에서 직접 3분 오디오를 생성하고, 미리듣기와 MP3 다운로드를 제공합니다.</li>
-        </ol>
-        <p className="moon-meta">기록은 남기지 않으며, 결과는 이 세션 안에서만 머뭅니다.</p>
+        <p className="moon-section-kicker">안내</p>
+        <h2 className="moon-aside-title">어떻게 정리되나요?</h2>
+        <div className="moon-grouped-list" role="list" aria-label="작동 방식">
+          <div className="moon-grouped-item" role="listitem">
+            <strong>감정 해석</strong>
+            <span>소원의 분위기와 방향성을 읽어 핵심 키워드로 정리합니다.</span>
+          </div>
+          <div className="moon-grouped-item" role="listitem">
+            <strong>공명 설계</strong>
+            <span>안전한 파라미터 안에서 주파수 조합과 리듬 패턴을 맞춥니다.</span>
+          </div>
+          <div className="moon-grouped-item" role="listitem">
+            <strong>로컬 생성</strong>
+            <span>브라우저에서 직접 3분 오디오를 만들고 바로 재생하거나 저장합니다.</span>
+          </div>
+        </div>
+        <div className="moon-aside-note">
+          <strong>프라이버시</strong>
+          <p>입력한 문장과 결과는 저장하지 않으며, 현재 세션 안에서만 머뭅니다.</p>
+        </div>
       </aside>
     </div>
   );

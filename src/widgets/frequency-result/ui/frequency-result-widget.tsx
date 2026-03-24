@@ -17,6 +17,7 @@ export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidget
 
   return (
     <section className="moon-card moon-result" aria-live="polite">
+      <div className="moon-result-eyebrow">당신의 공명 결과</div>
       <div className="moon-result-header">
         <div>
           <h2 className="moon-result-title">{result.title}</h2>
@@ -45,7 +46,7 @@ export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidget
         </div>
       </div>
 
-      <div className="moon-meta-grid">
+      <div className="moon-meta-grid" aria-label="공명 메타 정보">
         <div className="moon-meta-card">
           <strong>톤</strong>
           <span>{getToneLabel(result.analysis.tone)}</span>
@@ -60,9 +61,21 @@ export function FrequencyResultWidget({ result }: Readonly<FrequencyResultWidget
         </div>
       </div>
 
-      <div className="moon-panel moon-audio-panel">
-        <h3 className="moon-section-title">당신의 주파수</h3>
-        <p className="moon-quiet">
+      <div className="moon-audio-panel">
+        <div className="moon-audio-header">
+          <div>
+            <h3 className="moon-section-title">당신의 주파수</h3>
+            <p className="moon-quiet">
+              {audio.isRendering
+                ? "브라우저에서 mp3를 만들고 있어요. 잠시만 기다리면 바로 재생할 수 있어요."
+                : "조용한 공간에서 낮은 볼륨으로 먼저 들어보세요."}
+            </p>
+          </div>
+          <span className="moon-audio-badge">
+            {audio.url ? "재생 준비 완료" : "오디오 생성 중"}
+          </span>
+        </div>
+        <p className="moon-sr-only" aria-live="polite">
           {audio.isRendering
             ? "브라우저에서 mp3를 만들고 있어요. 잠시만 기다리면 바로 재생할 수 있어요."
             : "조용한 공간에서 낮은 볼륨으로 먼저 들어보세요."}
