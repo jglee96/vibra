@@ -15,8 +15,12 @@ export function SubmitWishForm({
   value,
   onChange,
 }: Readonly<SubmitWishFormProps>) {
+  const hintId = "wish-input-hint";
+  const errorId = "wish-input-error";
+
   return (
     <form
+      className="moon-form"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit(value);
@@ -28,19 +32,24 @@ export function SubmitWishForm({
       <textarea
         id="wish-input"
         className="moon-textarea"
+        aria-describedby={error ? `${hintId} ${errorId}` : hintId}
         placeholder="예: 사람들이 내 진심을 편안하게 느끼고, 대화할수록 매력이 깊어지는 분위기를 갖고 싶어."
         value={value}
         onChange={(event) => onChange(event.target.value)}
       />
       <div className="moon-form-footer">
-        <p className="moon-hint">
+        <p className="moon-hint" id={hintId}>
           한 문장으로 또렷하게 적을수록 더 잘 맞는 결의 주파수를 만들 수 있어요.
         </p>
         <button className="moon-button" type="submit" disabled={isPending}>
           {isPending ? "주파수 해석 중..." : "나만의 주파수 만들기"}
         </button>
       </div>
-      {error ? <p className="moon-error">{error}</p> : null}
+      {error ? (
+        <p className="moon-error" id={errorId} role="alert">
+          {error}
+        </p>
+      ) : null}
     </form>
   );
 }

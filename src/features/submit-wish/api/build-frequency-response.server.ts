@@ -1,4 +1,5 @@
 import {
+  buildEmotionEngine,
   buildFfmpegArgs,
   buildFrequencySubtitle,
   buildFrequencyTitle,
@@ -21,13 +22,19 @@ export async function buildFrequencyResponse(wish: string) {
   }
 
   const aiAnalysis = await analyzeWishWithOpenAI(wishReview.normalizedWish);
-  const audioRecipe = normalizeAudioRecipe(aiAnalysis.audioHints);
+  const emotionEngine = buildEmotionEngine(aiAnalysis, wishReview.normalizedWish);
+  const audioRecipe = normalizeAudioRecipe(emotionEngine.audioHints);
 
   return {
     title: buildFrequencyTitle(wishReview.normalizedWish),
-    subtitle: buildFrequencySubtitle(aiAnalysis.analysis),
-    analysis: aiAnalysis.analysis,
-    listeningGuide: aiAnalysis.listeningGuide,
+    subtitle: buildFrequencySubtitle(emotionEngine.analysis),
+    analysis: emotionEngine.analysis,
+    description: emotionEngine.description,
+    listeningGuide: emotionEngine.listeningGuide,
+    wishEmotionProfile: emotionEngine.wishEmotionProfile,
+    regulationTarget: emotionEngine.regulationTarget,
+    musicControlProfile: emotionEngine.musicControlProfile,
+    evidenceTrace: emotionEngine.evidenceTrace,
     audioRecipe,
     ffmpegArgs: buildFfmpegArgs(audioRecipe),
   };

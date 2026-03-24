@@ -28,6 +28,7 @@
     "@oxfmt/binding-darwin-arm64": "^0.42.0",
     "@oxlint/binding-darwin-arm64": "^1.57.0",
     "@playwright/test": "^1.52.0",
+    "@tailwindcss/postcss": "^4.2.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
@@ -37,6 +38,8 @@
     "jsdom": "^26.0.0",
     "oxfmt": "^0.42.0",
     "oxlint": "^1.57.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2",
     "typescript": "^5.7.2",
     "vitest": "^3.0.5"
   },
