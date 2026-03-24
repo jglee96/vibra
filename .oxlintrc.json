@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "unicorn", "import"],
+  "rules": {
+    "react-in-jsx-scope": "off",
+    "typescript-eslint/triple-slash-reference": "off",
+    "unicorn/prevent-abbreviations": "off"
+  }
+}

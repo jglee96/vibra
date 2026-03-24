@@ -1,0 +1,434 @@
+:root {
+  --bg: #06101e;
+  --bg-soft: #0d1a2b;
+  --panel: rgba(10, 20, 38, 0.78);
+  --panel-strong: rgba(17, 29, 51, 0.92);
+  --line: rgba(159, 198, 255, 0.2);
+  --line-strong: rgba(183, 214, 255, 0.38);
+  --text: #eff5ff;
+  --text-soft: rgba(228, 238, 255, 0.74);
+  --accent: #99c5ff;
+  --accent-strong: #d7e7ff;
+  --glow: rgba(112, 154, 255, 0.18);
+  --danger: #ffd1d1;
+  --shadow: 0 32px 80px rgba(1, 7, 20, 0.45);
+  --display-font: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "URW Palladio L", serif;
+  --body-font: "Avenir Next", "Segoe UI", "Noto Sans KR", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background:
+    radial-gradient(circle at top, rgba(62, 107, 175, 0.25), transparent 36%),
+    linear-gradient(180deg, #07101e 0%, #060d17 45%, #040912 100%);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: var(--body-font);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(153, 197, 255, 0.14), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(167, 214, 255, 0.1), transparent 18%),
+    radial-gradient(circle at 50% 100%, rgba(116, 146, 255, 0.1), transparent 28%);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.vibra-shell {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.vibra-shell::before,
+.vibra-shell::after {
+  position: absolute;
+  inset: auto;
+  border-radius: 999px;
+  content: "";
+  filter: blur(18px);
+}
+
+.vibra-shell::before {
+  top: 4rem;
+  right: 8%;
+  width: 14rem;
+  height: 14rem;
+  background: radial-gradient(circle, rgba(204, 226, 255, 0.26), transparent 70%);
+  animation: moon-breathe 10s ease-in-out infinite;
+}
+
+.vibra-shell::after {
+  left: -5rem;
+  bottom: 8%;
+  width: 18rem;
+  height: 18rem;
+  background: radial-gradient(circle, rgba(140, 168, 255, 0.16), transparent 72%);
+  animation: moon-breathe 14s ease-in-out infinite reverse;
+}
+
+.vibra-container {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 5rem;
+}
+
+.moon-hero {
+  display: grid;
+  gap: 1.75rem;
+  padding: 3.5rem 0 2.5rem;
+}
+
+.moon-pill {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.55rem 0.9rem;
+  color: var(--text-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.moon-title {
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(3rem, 8vw, 5.9rem);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+.moon-copy {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.moon-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.9fr);
+  align-items: start;
+}
+
+.moon-card {
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(14, 25, 43, 0.92), rgba(8, 15, 28, 0.9));
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+}
+
+.moon-card--form {
+  padding: 1.5rem;
+}
+
+.moon-card--aside {
+  padding: 1.3rem;
+}
+
+.moon-label {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: var(--accent-strong);
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.moon-textarea {
+  width: 100%;
+  min-height: 192px;
+  border: 1px solid rgba(189, 216, 255, 0.14);
+  border-radius: 24px;
+  background: rgba(4, 11, 22, 0.82);
+  padding: 1.2rem 1.1rem;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.moon-textarea:focus {
+  border-color: rgba(165, 206, 255, 0.46);
+  box-shadow: 0 0 0 4px rgba(153, 197, 255, 0.08);
+}
+
+.moon-form-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.moon-hint,
+.moon-meta,
+.moon-list {
+  color: var(--text-soft);
+}
+
+.moon-button {
+  border: 1px solid rgba(211, 231, 255, 0.28);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(193, 217, 255, 0.22), rgba(90, 123, 194, 0.18));
+  padding: 0.95rem 1.4rem;
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.moon-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(223, 236, 255, 0.44);
+}
+
+.moon-button:disabled {
+  cursor: wait;
+  opacity: 0.58;
+}
+
+.moon-aside-title,
+.moon-section-title {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.moon-list {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding-left: 1rem;
+  line-height: 1.7;
+}
+
+.moon-result {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.35rem;
+}
+
+.moon-result-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.moon-result-title {
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.02;
+}
+
+.moon-subtitle {
+  margin: 0.45rem 0 0;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+.moon-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.moon-chip {
+  border: 1px solid rgba(180, 211, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(156, 196, 255, 0.08);
+  padding: 0.45rem 0.8rem;
+  color: var(--accent-strong);
+  font-size: 0.92rem;
+}
+
+.moon-section-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.moon-panel {
+  border: 1px solid rgba(182, 212, 255, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem 1rem 1.05rem;
+}
+
+.moon-panel p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.75;
+}
+
+.moon-process {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.moon-process-step {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--text-soft);
+}
+
+.moon-process-dot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  background: rgba(145, 182, 255, 0.24);
+  box-shadow: 0 0 0 0 rgba(153, 197, 255, 0.28);
+}
+
+.moon-process-step[data-active="true"] .moon-process-dot {
+  background: var(--accent);
+  animation: pulse 1.6s ease infinite;
+}
+
+.moon-error {
+  border: 1px solid rgba(255, 209, 209, 0.14);
+  border-radius: 18px;
+  background: rgba(71, 15, 24, 0.22);
+  padding: 0.95rem 1rem;
+  color: var(--danger);
+  line-height: 1.6;
+}
+
+.moon-audio-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.moon-audio {
+  width: 100%;
+}
+
+.moon-meta-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.moon-meta-card {
+  border: 1px solid rgba(184, 212, 255, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.95rem;
+}
+
+.moon-meta-card strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--accent-strong);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.moon-meta-card span {
+  color: var(--text-soft);
+}
+
+.moon-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.moon-quiet {
+  color: var(--text-soft);
+}
+
+.moon-link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  border: 1px solid rgba(214, 231, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(151, 195, 255, 0.08);
+  padding: 0.85rem 1.2rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.moon-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(153, 197, 255, 0.42);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(153, 197, 255, 0);
+  }
+}
+
+@keyframes moon-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(12px) scale(1.05);
+  }
+}
+
+@media (max-width: 980px) {
+  .moon-grid,
+  .moon-section-grid,
+  .moon-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vibra-container {
+    width: min(100% - 1.2rem, 1000px);
+  }
+}
