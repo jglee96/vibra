@@ -1,6 +1,6 @@
 import type {
   AutomationCurve,
-  VoicePlan,
+  ResolvedVoicePlan,
   WebAudioPlaybackPlan,
 } from "@/entities/frequency";
 
@@ -83,12 +83,11 @@ function getCurveValueAtTime(curve: AutomationCurve, timeSec: number) {
 
 function createVoicePair(
   context: AudioContext,
-  voice: VoicePlan,
+  voice: ResolvedVoicePlan,
   voiceInput: GainNode,
   startAt: number,
   stopAt: number,
 ) {
-  const centerPan = clamp(getCurveValueAtTime(voice.pan, 0), -0.7, 0.7);
   const leftPan = context.createStereoPanner();
   const leftGain = context.createGain();
   const leftOsc = context.createOscillator();
@@ -96,14 +95,29 @@ function createVoicePair(
   const rightGain = context.createGain();
   const rightOsc = context.createOscillator();
 
-  leftPan.pan.value = clamp(centerPan - 0.35, -1, 1);
-  rightPan.pan.value = clamp(centerPan + 0.35, -1, 1);
+  const leftPanCurve: AutomationCurve = {
+    interpolation: "linear",
+    points: voice.pan.points.map((point) => ({
+      timeSec: point.timeSec,
+      value: clamp(point.value - 0.35, -1, 1),
+    })),
+  };
+  const rightPanCurve: AutomationCurve = {
+    interpolation: "linear",
+    points: voice.pan.points.map((point) => ({
+      timeSec: point.timeSec,
+      value: clamp(point.value + 0.35, -1, 1),
+    })),
+  };
+
   leftGain.gain.value = 0.5;
   rightGain.gain.value = 0.5;
   leftOsc.type = "sine";
   rightOsc.type = "sine";
   leftOsc.frequency.setValueAtTime(voice.frequencyHz, startAt);
   rightOsc.frequency.setValueAtTime(voice.frequencyHz + voice.stereoOffsetHz, startAt);
+  scheduleCurve(leftPan.pan, leftPanCurve, startAt);
+  scheduleCurve(rightPan.pan, rightPanCurve, startAt);
 
   leftOsc.connect(leftGain);
   leftGain.connect(leftPan);
@@ -132,7 +146,7 @@ function createVoicePair(
 
 function schedulePulseGain(
   context: AudioContext,
-  voice: VoicePlan,
+  voice: ResolvedVoicePlan,
   pulseGain: GainNode,
   startAt: number,
   durationSec: number,
@@ -162,7 +176,7 @@ function schedulePulseGain(
 
 function createVoiceGraph(
   context: AudioContext,
-  voice: VoicePlan,
+  voice: ResolvedVoicePlan,
   mixBus: GainNode,
   startAt: number,
   stopAt: number,
@@ -189,15 +203,22 @@ function createVoiceGraph(
   if (voice.modulationRateHz && voice.modulationDepth) {
     const lfo = context.createOscillator();
     const lfoDepth = context.createGain();
+    const filterLfoDepth = context.createGain();
 
     lfo.type = "sine";
     lfo.frequency.setValueAtTime(voice.modulationRateHz, startAt);
     lfoDepth.gain.setValueAtTime(voice.modulationDepth, startAt);
+    filterLfoDepth.gain.setValueAtTime(
+      Math.max(voice.modulationDepth * 5200, 140),
+      startAt,
+    );
     lfo.connect(lfoDepth);
+    lfo.connect(filterLfoDepth);
     lfoDepth.connect(voiceGain.gain);
+    filterLfoDepth.connect(voiceFilter.frequency);
     lfo.start(startAt);
     lfo.stop(stopAt);
-    cleanupNodes.push(lfo, lfoDepth);
+    cleanupNodes.push(lfo, lfoDepth, filterLfoDepth);
   }
 
   return () => {
@@ -233,17 +254,17 @@ export async function startFrequencyPlayback(
   const cleanupCallbacks: Array<() => void> = [];
 
   highpass.type = "highpass";
-  highpass.frequency.value = plan.effectBus.highpassHz;
+  scheduleCurve(highpass.frequency, plan.effectBus.highpassHz, startAt);
   lowpass.type = "lowpass";
-  lowpass.frequency.value = plan.effectBus.lowpassHz;
+  scheduleCurve(lowpass.frequency, plan.effectBus.lowpassHz, startAt);
   compressor.attack.value = plan.effectBus.compressor.attack;
   compressor.knee.value = plan.effectBus.compressor.knee;
   compressor.ratio.value = plan.effectBus.compressor.ratio;
   compressor.release.value = plan.effectBus.compressor.release;
   compressor.threshold.value = plan.effectBus.compressor.threshold;
-  masterGain.gain.value = plan.effectBus.masterGain;
-  delaySend.gain.value = plan.effectBus.delayMix;
-  delay.delayTime.value = plan.effectBus.delayTimeSec;
+  scheduleCurve(masterGain.gain, plan.effectBus.masterGain, startAt);
+  scheduleCurve(delaySend.gain, plan.effectBus.delayMix, startAt);
+  scheduleCurve(delay.delayTime, plan.effectBus.delayTimeSec, startAt);
   feedback.gain.value = plan.effectBus.delayFeedback;
 
   inputBus.connect(highpass);

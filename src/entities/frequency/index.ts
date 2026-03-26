@@ -23,11 +23,12 @@ export type {
 } from "@/entities/frequency/model/frequency";
 export type {
   AutomationCurve,
-  EffectBusPlan,
   PlaybackSection,
+  ResolvedVoicePlan,
   VoicePlan,
   WebAudioPlaybackPlan,
 } from "@/entities/frequency/lib/build-web-audio-playback-plan";
+export type { EffectPatternSpec, WebAudioPatternProgram } from "@/entities/frequency/lib/build-web-audio-playback-plan";
 export {
   buildEmotionEngine,
   buildFallbackWishAnalysis,
@@ -36,5 +37,8 @@ export {
   buildFrequencySubtitle,
   buildFrequencyTitle,
 } from "@/entities/frequency/lib/build-frequency-copy";
-export { buildWebAudioPlaybackPlan } from "@/entities/frequency/lib/build-web-audio-playback-plan";
+export {
+  buildWebAudioPatternProgram,
+  buildWebAudioPlaybackPlan,
+} from "@/entities/frequency/lib/build-web-audio-playback-plan";
 export { normalizeAudioRecipe } from "@/entities/frequency/lib/normalize-audio-recipe";

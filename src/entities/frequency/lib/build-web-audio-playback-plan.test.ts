@@ -28,10 +28,10 @@ describe("buildWebAudioPlaybackPlan", () => {
     expect(plan.voices.filter((voice) => voice.role === "drone")).toHaveLength(3);
     expect(plan.voices.filter((voice) => voice.role === "harmonic")).toHaveLength(3);
     expect(plan.voices.some((voice) => voice.role === "pulse")).toBe(true);
-    expect(plan.effectBus.delayTimeSec).toBeGreaterThan(0);
-    expect(plan.voices[0]?.gain.points[0]?.value).toBeLessThan(
-      plan.voices[0]?.gain.points[2]?.value ?? 0,
-    );
+    expect(plan.effectBus.delayTimeSec.points[0]?.value).toBeGreaterThan(0);
+    expect(plan.voices[0]?.gain.points[0]?.value).toBeLessThan(plan.voices[0]?.gain.points[1]?.value ?? 0);
+    expect(plan.voices[0]?.pan.points[0]?.value).not.toBe(plan.voices[0]?.pan.points[1]?.value);
+    expect(plan.voices[3]?.gain.points[2]?.value).not.toBe(plan.voices[3]?.gain.points[3]?.value);
   });
 
   it("omits pulse voice when pulseHz is undefined", () => {
@@ -42,6 +42,6 @@ describe("buildWebAudioPlaybackPlan", () => {
     });
 
     expect(plan.voices.every((voice) => voice.role !== "pulse")).toBe(true);
-    expect(plan.effectBus.lowpassHz).toBe(3400);
+    expect(plan.effectBus.lowpassHz.points.some((point) => point.value === 3400)).toBe(true);
   });
 });
