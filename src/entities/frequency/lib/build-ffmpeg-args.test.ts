@@ -13,6 +13,10 @@ describe("buildFfmpegArgs", () => {
       ],
       pulseHz: 0.18,
       reverbMix: 0.2,
+      harmonicBlend: 0.34,
+      motionDepth: 0.28,
+      stereoDriftHz: 0.11,
+      texture: "bright",
       fadeInSec: 8,
       fadeOutSec: 12,
     });
@@ -21,5 +25,7 @@ describe("buildFfmpegArgs", () => {
     expect(args.at(-1)).toBe("vibra-output.mp3");
     expect(args.join(" ")).toContain("aevalsrc=");
     expect(args.join(" ")).toContain("libmp3lame");
+    expect(args.join(" ")).toContain("chorus=");
+    expect(args.join(" ")).toContain("equalizer=");
   });
 });

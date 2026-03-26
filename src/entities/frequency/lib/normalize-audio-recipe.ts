@@ -12,6 +12,9 @@ export function normalizeAudioRecipe(input: AudioHints): AudioRecipe {
     input.pulseHz === undefined ? undefined : rounded(clamp(input.pulseHz, 0.08, 0.6));
   const reverbMix = rounded(clamp(input.reverbMix, 0.08, 0.28));
   const weights = input.droneWeights.map((weight) => clamp(weight, 0.04, 0.22));
+  const harmonicBlend = rounded(clamp(input.harmonicBlend, 0.08, 0.72));
+  const motionDepth = rounded(clamp(input.motionDepth, 0.08, 0.72));
+  const stereoDriftHz = rounded(clamp(input.stereoDriftHz, 0.04, 0.24));
 
   return {
     durationSec: 180,
@@ -24,6 +27,10 @@ export function normalizeAudioRecipe(input: AudioHints): AudioRecipe {
     ],
     pulseHz,
     reverbMix,
+    harmonicBlend,
+    motionDepth,
+    stereoDriftHz,
+    texture: input.texture,
     fadeInSec: 8,
     fadeOutSec: 12,
   };

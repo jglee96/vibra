@@ -346,6 +346,52 @@ function buildAudioHints(musicControlProfile: MusicControlProfile): AudioHints {
   const droneWeights = baseWeights[musicControlProfile.modeColor].map((weight, index) =>
     Number((weight + brightnessDelta[index]).toFixed(3)),
   ) as [number, number, number];
+  const harmonicBlend = Number(
+    (
+      (musicControlProfile.modeColor === "open"
+        ? 0.42
+        : musicControlProfile.modeColor === "major"
+          ? 0.38
+          : musicControlProfile.modeColor === "minor"
+            ? 0.22
+            : 0.28) +
+      (musicControlProfile.spectralBrightness === "bright" ? 0.12 : 0) -
+      (musicControlProfile.spectralBrightness === "dim" ? 0.06 : 0)
+    ).toFixed(3),
+  );
+  const motionDepth = Number(
+    (
+      (musicControlProfile.tempoDensity === "flowing"
+        ? 0.44
+        : musicControlProfile.tempoDensity === "steady"
+          ? 0.3
+          : 0.18) +
+      (musicControlProfile.rhythmicPulse === "steady"
+        ? 0.14
+        : musicControlProfile.rhythmicPulse === "gentle"
+          ? 0.08
+          : 0)
+    ).toFixed(3),
+  );
+  const stereoDriftHz = Number(
+    (
+      (musicControlProfile.spaciousness === "wide"
+        ? 0.16
+        : musicControlProfile.spaciousness === "open"
+          ? 0.11
+          : 0.07) +
+      targetVad.arousal * 0.04
+    ).toFixed(3),
+  );
+  const texture =
+    musicControlProfile.spaciousness === "wide" &&
+    musicControlProfile.spectralBrightness === "dim"
+      ? "hazy"
+      : musicControlProfile.spectralBrightness === "bright"
+        ? "bright"
+        : musicControlProfile.rhythmicPulse === "steady"
+          ? "balanced"
+          : "soft";
 
   return {
     baseHz,
@@ -353,6 +399,10 @@ function buildAudioHints(musicControlProfile: MusicControlProfile): AudioHints {
     pulseHz,
     reverbMix,
     droneWeights,
+    harmonicBlend,
+    motionDepth,
+    stereoDriftHz,
+    texture,
   };
 }
 

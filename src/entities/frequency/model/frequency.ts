@@ -16,6 +16,10 @@ export const audioHintSchema = z.object({
   pulseHz: z.number().optional(),
   reverbMix: z.number(),
   droneWeights: z.array(z.number()).length(3),
+  harmonicBlend: unitIntervalSchema,
+  motionDepth: unitIntervalSchema,
+  stereoDriftHz: z.number(),
+  texture: z.enum(["soft", "balanced", "bright", "hazy"]),
 });
 
 export const vadSchema = z.object({
@@ -69,6 +73,10 @@ export const audioRecipeSchema = z.object({
   droneLayers: z.array(droneLayerSchema).length(3),
   pulseHz: z.number().optional(),
   reverbMix: z.number(),
+  harmonicBlend: unitIntervalSchema,
+  motionDepth: unitIntervalSchema,
+  stereoDriftHz: z.number(),
+  texture: z.enum(["soft", "balanced", "bright", "hazy"]),
   fadeInSec: z.number(),
   fadeOutSec: z.number(),
 });
