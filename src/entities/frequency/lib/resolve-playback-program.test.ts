@@ -1,7 +1,7 @@
 import { buildSectionTemplate } from "@/entities/frequency/lib/pattern-builders";
 import { resolvePlaybackProgram } from "@/entities/frequency/lib/resolve-playback-program";
 import { texturePrograms } from "@/entities/frequency/lib/texture-programs";
-import { createContext } from "@/entities/frequency/lib/pattern-core";
+import { createContext, type PlaybackInput } from "@/entities/frequency/lib/pattern-core";
 import type { AudioRecipe } from "@/entities/frequency/model/frequency";
 
 const recipe: AudioRecipe = {
@@ -26,10 +26,22 @@ const recipe: AudioRecipe = {
 describe("resolvePlaybackProgram", () => {
   it("resolves pattern programs into automation curves for the engine", () => {
     const sectionDefs = buildSectionTemplate(recipe.durationSec);
-    const context = createContext(recipe, sectionDefs);
+    const input: PlaybackInput = {
+      audioRecipe: recipe,
+      musicControlProfile: {
+        modeColor: "minor",
+        rhythmicPulse: "gentle",
+        spaciousness: "wide",
+        spectralBrightness: "dim",
+        targetVad: { arousal: 0.28, valence: 0.56 },
+        tempoDensity: "still",
+      },
+      regulationTarget: "soothe" as const,
+    };
+    const context = createContext(input, sectionDefs);
     const plan = resolvePlaybackProgram({
       program: texturePrograms.hazy(recipe, context),
-      recipe,
+      input,
       sectionDefs,
     });
 

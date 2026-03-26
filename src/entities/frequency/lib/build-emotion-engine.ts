@@ -291,14 +291,16 @@ function buildAudioHints(musicControlProfile: MusicControlProfile): AudioHints {
 
   const baseHz = Number(
     (
-      112 +
-      targetVad.valence * 42 +
-      targetVad.arousal * 18 +
+      104 +
+      targetVad.valence * 56 +
+      targetVad.arousal * 28 +
       (musicControlProfile.modeColor === "major"
-        ? 6
+        ? 18
         : musicControlProfile.modeColor === "minor"
-          ? -2
-          : 2)
+          ? -8
+          : musicControlProfile.modeColor === "open"
+            ? 10
+            : 2)
     ).toFixed(3),
   );
   const binauralOffsetHz = Number(
@@ -317,8 +319,8 @@ function buildAudioHints(musicControlProfile: MusicControlProfile): AudioHints {
       ? undefined
       : Number(
           (
-            (musicControlProfile.rhythmicPulse === "steady" ? 0.2 : 0.12) +
-            targetVad.arousal * 0.18
+            (musicControlProfile.rhythmicPulse === "steady" ? 0.24 : 0.15) +
+            targetVad.arousal * 0.24
           ).toFixed(3),
         );
   const reverbMix = Number(

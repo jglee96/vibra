@@ -29,11 +29,25 @@ const recipe: AudioRecipe = {
   fadeOutSec: 12,
 };
 
-const context = createContext(recipe, [
-  { id: "intro", startSec: 0, endSec: 40 },
-  { id: "body", startSec: 40, endSec: 130 },
-  { id: "release", startSec: 130, endSec: 180 },
-]);
+const context = createContext(
+  {
+    audioRecipe: recipe,
+    musicControlProfile: {
+      modeColor: "major",
+      rhythmicPulse: "steady",
+      spaciousness: "open",
+      spectralBrightness: "bright",
+      targetVad: { arousal: 0.62, valence: 0.68 },
+      tempoDensity: "flowing",
+    },
+    regulationTarget: "uplift",
+  },
+  [
+    { id: "intro", startSec: 0, endSec: 40 },
+    { id: "body", startSec: 40, endSec: 130 },
+    { id: "release", startSec: 130, endSec: 180 },
+  ],
+);
 
 describe("pattern-core", () => {
   it("resolves constant, ramp, sequence, lfo, and blend patterns", () => {

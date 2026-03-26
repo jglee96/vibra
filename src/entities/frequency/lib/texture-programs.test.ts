@@ -24,7 +24,21 @@ const recipe: AudioRecipe = {
 
 describe("texturePrograms", () => {
   it("returns distinct effect programs per texture", () => {
-    const context = createContext(recipe, buildSectionTemplate(recipe.durationSec));
+    const context = createContext(
+      {
+        audioRecipe: recipe,
+        musicControlProfile: {
+          modeColor: "open",
+          rhythmicPulse: "steady",
+          spaciousness: "open",
+          spectralBrightness: "balanced",
+          targetVad: { arousal: 0.56, valence: 0.58 },
+          tempoDensity: "flowing",
+        },
+        regulationTarget: "focus",
+      },
+      buildSectionTemplate(recipe.durationSec),
+    );
     const softProgram = texturePrograms.soft({ ...recipe, texture: "soft" }, context);
     const brightProgram = texturePrograms.bright({ ...recipe, texture: "bright" }, context);
 

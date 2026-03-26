@@ -1,4 +1,8 @@
-import type { AudioRecipe } from "@/entities/frequency/model/frequency";
+import type {
+  AudioRecipe,
+  MusicControlProfile,
+  RegulationTarget,
+} from "@/entities/frequency/model/frequency";
 
 export type PatternSectionId = "intro" | "body" | "release";
 
@@ -11,7 +15,15 @@ export type PatternSectionDef = {
 export type CycleContext = {
   durationSec: number;
   recipe: AudioRecipe;
+  musicControlProfile: MusicControlProfile;
+  regulationTarget: RegulationTarget;
   sections: PatternSectionDef[];
+};
+
+export type PlaybackInput = {
+  audioRecipe: AudioRecipe;
+  musicControlProfile: MusicControlProfile;
+  regulationTarget: RegulationTarget;
 };
 
 export type CurvePoint = {
@@ -69,10 +81,12 @@ function fixed(value: number) {
   return Number(value.toFixed(3));
 }
 
-export function createContext(recipe: AudioRecipe, sections: PatternSectionDef[]): CycleContext {
+export function createContext(input: PlaybackInput, sections: PatternSectionDef[]): CycleContext {
   return {
-    durationSec: recipe.durationSec,
-    recipe,
+    durationSec: input.audioRecipe.durationSec,
+    musicControlProfile: input.musicControlProfile,
+    recipe: input.audioRecipe,
+    regulationTarget: input.regulationTarget,
     sections,
   };
 }

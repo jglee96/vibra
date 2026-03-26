@@ -1,4 +1,3 @@
-import type { AudioRecipe } from "@/entities/frequency/model/frequency";
 import {
   buildDroneVoiceSpec,
   buildPlaybackSections,
@@ -8,12 +7,17 @@ import {
   type AutomationCurve,
   type PlaybackSection,
 } from "@/entities/frequency/lib/pattern-builders";
-import { createContext, type PatternSectionDef } from "@/entities/frequency/lib/pattern-core";
+import {
+  createContext,
+  type PatternSectionDef,
+  type PlaybackInput,
+} from "@/entities/frequency/lib/pattern-core";
 import type { WebAudioPatternProgram } from "@/entities/frequency/lib/texture-programs";
 
 export type ResolvedVoicePlan = {
   id: string;
   role: "drone" | "harmonic" | "pulse";
+  oscillatorType: OscillatorType;
   frequencyHz: number;
   stereoOffsetHz: number;
   gain: AutomationCurve;
@@ -42,19 +46,20 @@ export type ResolvedPlaybackPlan = {
 
 export function resolvePlaybackProgram({
   program,
-  recipe,
+  input,
   sectionDefs,
 }: {
   program: WebAudioPatternProgram;
-  recipe: AudioRecipe;
+  input: PlaybackInput;
   sectionDefs: PatternSectionDef[];
 }): ResolvedPlaybackPlan {
-  const context = createContext(recipe, sectionDefs);
+  const context = createContext(input, sectionDefs);
+  const recipe = input.audioRecipe;
   const droneVoices = recipe.droneLayers.flatMap((layer, index) => [
-    buildDroneVoiceSpec(recipe, layer, index),
-    buildHarmonicVoiceSpec(recipe, layer, index),
+    buildDroneVoiceSpec(input, layer, index),
+    buildHarmonicVoiceSpec(input, layer, index),
   ]);
-  const pulseVoice = buildPulseVoiceSpec(recipe);
+  const pulseVoice = buildPulseVoiceSpec(input);
   const voiceSpecs = pulseVoice ? [...droneVoices, pulseVoice] : droneVoices;
 
   return {

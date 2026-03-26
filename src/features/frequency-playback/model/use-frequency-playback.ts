@@ -33,7 +33,7 @@ export function useFrequencyPlayback(result: FrequencyResult | null): FrequencyP
   const [status, setStatus] = useState<PlaybackStatus>(result ? "ready" : "idle");
   const [error, setError] = useState<string | null>(null);
   const plan = useMemo(
-    () => (result ? buildWebAudioPlaybackPlan(result.audioRecipe) : null),
+    () => (result ? buildWebAudioPlaybackPlan(result) : null),
     [result],
   );
 

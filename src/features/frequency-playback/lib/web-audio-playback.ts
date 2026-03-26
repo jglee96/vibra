@@ -112,8 +112,8 @@ function createVoicePair(
 
   leftGain.gain.value = 0.5;
   rightGain.gain.value = 0.5;
-  leftOsc.type = "sine";
-  rightOsc.type = "sine";
+  leftOsc.type = voice.oscillatorType;
+  rightOsc.type = voice.oscillatorType;
   leftOsc.frequency.setValueAtTime(voice.frequencyHz, startAt);
   rightOsc.frequency.setValueAtTime(voice.frequencyHz + voice.stereoOffsetHz, startAt);
   scheduleCurve(leftPan.pan, leftPanCurve, startAt);
