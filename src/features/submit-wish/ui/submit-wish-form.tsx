@@ -8,14 +8,6 @@ import {
   textSecondary,
 } from "@/shared/ui/tailwind";
 
-import {
-  errorPanel,
-  inputSurface,
-  primaryButton,
-  textPrimary,
-  textSecondary,
-} from "@/shared/ui/tailwind";
-
 type SubmitWishFormProps = {
   error: string | null;
   isPending: boolean;
