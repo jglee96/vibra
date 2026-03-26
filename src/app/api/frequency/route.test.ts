@@ -21,11 +21,14 @@ vi.mock("@/features/submit-wish", () => ({
         { wave: "sine", freq: 128, gain: 0.15 },
         { wave: "sine", freq: 191.7, gain: 0.08 },
       ],
+      harmonicBlend: 0.2,
+      motionDepth: 0.24,
       reverbMix: 0.16,
+      stereoDriftHz: 0.12,
+      texture: "balanced",
       fadeInSec: 8,
       fadeOutSec: 12,
     },
-    ffmpegArgs: ["-f", "lavfi", "-i", "test", "vibra-output.mp3"],
   })),
 }));
 

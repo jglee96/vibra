@@ -30,7 +30,7 @@ describe("buildFrequencyResponse", () => {
     expect(result.regulationTarget).toBe("soothe");
     expect(result.wishEmotionProfile.language).toBe("ko");
     expect(result.audioRecipe.durationSec).toBe(180);
-    expect(result.ffmpegArgs.at(-1)).toBe("vibra-output.mp3");
+    expect(["soft", "balanced", "bright", "hazy"]).toContain(result.audioRecipe.texture);
   });
 
   it("rejects unsafe wishes before calling the model", async () => {

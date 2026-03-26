@@ -1,7 +1,7 @@
 "use client";
 
 import type { FrequencyResult } from "@/entities/frequency";
-import { useRenderedFrequencyAudio } from "@/features/render-frequency-audio";
+import { useFrequencyPlayback } from "@/features/frequency-playback";
 import { cn } from "@/shared/lib/cn";
 import {
   badge,
@@ -30,7 +30,15 @@ type FrequencyResultWidgetProps = {
 export function FrequencyResultWidget({
   result,
 }: Readonly<FrequencyResultWidgetProps>) {
-  const audio = useRenderedFrequencyAudio(result);
+  const audio = useFrequencyPlayback(result);
+  const statusLabel =
+    audio.status === "playing"
+      ? "재생 중"
+      : audio.status === "error"
+        ? "재생 불가"
+        : audio.status === "ready"
+          ? "준비됨"
+          : "대기 중";
 
   return (
     <section className={`${glassCard} grid gap-5 p-5 sm:p-6 lg:p-7`} aria-live="polite">
@@ -143,47 +151,43 @@ export function FrequencyResultWidget({
               당신의 주파수
             </h3>
             <p className={`mt-3 mb-0 text-sm leading-7 ${textSecondary}`}>
-              {audio.isRendering
-                ? "브라우저 안에서 당신만의 소리를 열고 있어요. 오디오가 준비되면 바로 이 자리에서 재생할 수 있습니다."
-                : "처음에는 낮은 볼륨으로 시작해보세요. 조용한 순간일수록 파장이 더 자연스럽게 붙습니다."}
+              {audio.isPlaying
+                ? "지금 브라우저 안에서 바로 재생 중이에요. 너무 크지 않은 볼륨으로 편안하게 들어보세요."
+                : "생성 대기 없이 바로 재생할 수 있어요. 처음에는 낮은 볼륨으로 시작해보세요."}
             </p>
           </div>
-          <span className={badge}>
-            {audio.url ? "재생 준비 완료" : "오디오 생성 중"}
-          </span>
+          <span className={badge}>{statusLabel}</span>
         </div>
         <p className="sr-only" aria-live="polite">
-          {audio.isRendering
-            ? "브라우저에서 mp3를 만들고 있어요. 잠시만 기다리면 바로 재생할 수 있어요."
-            : "조용한 공간에서 낮은 볼륨으로 먼저 들어보세요."}
+          {audio.isPlaying
+            ? "브라우저에서 오디오를 재생하고 있어요."
+            : "재생 버튼을 누르면 바로 오디오를 들을 수 있어요."}
         </p>
         {audio.error ? <p className={errorPanel}>{audio.error}</p> : null}
-        {audio.url ? (
-          <audio className="w-full" controls src={audio.url} />
-        ) : null}
         <div className="flex flex-wrap items-stretch justify-between gap-3 sm:items-center">
           <span className={`text-sm leading-6 ${textSecondary}`}>
-            {audio.url
-              ? "생성이 완료되었어요."
-              : "첫 생성에는 약간 더 시간이 걸릴 수 있어요."}
+            {audio.isPlaying
+              ? "정지 버튼으로 언제든 멈출 수 있어요."
+              : "결과를 받은 뒤 별도 렌더링 대기 없이 바로 재생할 수 있어요."}
           </span>
-          {audio.url && audio.fileName ? (
-            <a
-              className={cn(secondaryButton, "w-full sm:w-auto")}
-              download={audio.fileName}
-              href={audio.url}
-            >
-              MP3 다운로드
-            </a>
-          ) : (
+          <div className="flex w-full flex-wrap gap-3 sm:w-auto">
             <button
               className={cn(primaryButton, "w-full sm:w-auto")}
               type="button"
-              disabled
+              disabled={audio.status === "idle"}
+              onClick={() => void audio.play()}
             >
-              MP3 준비 중...
+              재생
             </button>
-          )}
+            <button
+              className={cn(secondaryButton, "w-full sm:w-auto")}
+              type="button"
+              disabled={!audio.isPlaying}
+              onClick={audio.stop}
+            >
+              정지
+            </button>
+          </div>
         </div>
       </div>
     </section>

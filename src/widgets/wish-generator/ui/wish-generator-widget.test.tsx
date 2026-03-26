@@ -64,19 +64,23 @@ vi.mock("@/features/submit-wish/api/request-frequency", () => ({
       ],
       pulseHz: 0.12,
       reverbMix: 0.22,
+      harmonicBlend: 0.34,
+      motionDepth: 0.2,
+      stereoDriftHz: 0.12,
+      texture: "hazy",
       fadeInSec: 8,
       fadeOutSec: 12,
     },
-    ffmpegArgs: ["-f", "lavfi", "-i", "test", "vibra-output.mp3"],
   })),
 }));
 
-vi.mock("@/features/render-frequency-audio", () => ({
-  useRenderedFrequencyAudio: vi.fn(() => ({
+vi.mock("@/features/frequency-playback", () => ({
+  useFrequencyPlayback: vi.fn(() => ({
     error: null,
-    fileName: "vibra.mp3",
-    isRendering: false,
-    url: "blob:audio",
+    isPlaying: false,
+    play: vi.fn(),
+    status: "ready",
+    stop: vi.fn(),
   })),
 }));
 
@@ -96,9 +100,7 @@ describe("WishGeneratorWidget", () => {
       expect(screen.getByText("부드러운 존재감을 위한 주파수")).toBeInTheDocument();
     });
 
-    expect(screen.getByRole("link", { name: "MP3 다운로드" })).toHaveAttribute(
-      "href",
-      "blob:audio",
-    );
+    expect(screen.getByRole("button", { name: "재생" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "정지" })).toBeDisabled();
   });
 });

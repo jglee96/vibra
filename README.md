@@ -14,7 +14,7 @@
    - `MusicControlProfile` 생성
    - 오디오 힌트 생성
 5. [`normalizeAudioRecipe`](/Users/zakklee/dev/vibra/src/entities/frequency/lib/normalize-audio-recipe.ts)에서 안전한 범위로 오디오 레시피를 보정합니다.
-6. 브라우저에서 ffmpeg wasm으로 mp3를 렌더링합니다.
+6. 브라우저에서 WebAudio로 즉시 재생 가능한 오디오 그래프를 구성합니다.
 
 ## 감정 엔진 모델
 

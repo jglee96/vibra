@@ -21,7 +21,13 @@ export type {
   Vad,
   WishEmotionProfile,
 } from "@/entities/frequency/model/frequency";
-export { buildFfmpegArgs, getOutputFileName } from "@/entities/frequency/lib/build-ffmpeg-args";
+export type {
+  AutomationCurve,
+  EffectBusPlan,
+  PlaybackSection,
+  VoicePlan,
+  WebAudioPlaybackPlan,
+} from "@/entities/frequency/lib/build-web-audio-playback-plan";
 export {
   buildEmotionEngine,
   buildFallbackWishAnalysis,
@@ -30,4 +36,5 @@ export {
   buildFrequencySubtitle,
   buildFrequencyTitle,
 } from "@/entities/frequency/lib/build-frequency-copy";
+export { buildWebAudioPlaybackPlan } from "@/entities/frequency/lib/build-web-audio-playback-plan";
 export { normalizeAudioRecipe } from "@/entities/frequency/lib/normalize-audio-recipe";

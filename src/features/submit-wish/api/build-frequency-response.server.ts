@@ -1,6 +1,5 @@
 import {
   buildEmotionEngine,
-  buildFfmpegArgs,
   buildFrequencySubtitle,
   buildFrequencyTitle,
   normalizeAudioRecipe,
@@ -36,6 +35,5 @@ export async function buildFrequencyResponse(wish: string) {
     musicControlProfile: emotionEngine.musicControlProfile,
     evidenceTrace: emotionEngine.evidenceTrace,
     audioRecipe,
-    ffmpegArgs: buildFfmpegArgs(audioRecipe),
   };
 }

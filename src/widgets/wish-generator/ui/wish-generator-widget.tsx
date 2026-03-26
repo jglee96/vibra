@@ -115,7 +115,7 @@ export function WishGeneratorWidget() {
               3. 로컬 생성
             </p>
             <p className={`mt-2 mb-0 text-sm leading-6 ${textPrimary}`}>
-              결과 오디오는 브라우저에서 직접 만들어 바로 재생하거나 저장할 수 있습니다.
+              결과 오디오는 브라우저에서 바로 재생되며 기다리는 렌더링 단계 없이 즉시 들을 수 있습니다.
             </p>
           </div>
         </div>

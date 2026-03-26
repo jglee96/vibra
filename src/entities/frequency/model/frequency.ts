@@ -92,7 +92,6 @@ export const frequencyResultSchema = z.object({
   musicControlProfile: musicControlProfileSchema,
   evidenceTrace: z.array(evidenceTraceSchema).min(2).max(8),
   audioRecipe: audioRecipeSchema,
-  ffmpegArgs: z.array(z.string()),
 });
 
 export type Analysis = z.infer<typeof analysisSchema>;
