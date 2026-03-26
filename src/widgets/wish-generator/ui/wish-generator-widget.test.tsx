@@ -84,7 +84,7 @@ describe("WishGeneratorWidget", () => {
   it("submits a wish and renders the resonance result", async () => {
     render(<WishGeneratorWidget />);
 
-    fireEvent.change(screen.getByLabelText("당신의 소원"), {
+    fireEvent.change(screen.getByLabelText("당신의 바람"), {
       target: {
         value: "대화할수록 편안하고 매력적인 존재감이 느껴졌으면 좋겠어",
       },

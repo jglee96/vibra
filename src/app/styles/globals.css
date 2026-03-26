@@ -5,3 +5,11 @@
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Apple SD Gothic Neo",
     "Noto Sans KR", "Segoe UI", sans-serif;
 }
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  min-height: 100vh;
+}

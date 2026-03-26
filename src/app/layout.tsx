@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "@/app/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Vibra | 모든 것을 끌어당기는 밤의 주파수",
+  title: "Vibra | 소원을 차분한 주파수로 정리하는 스튜디오",
   description:
-    "원하는 현실을 한 줄로 적으면, Vibra가 먼저 그 밤의 분위기를 울려주는 감각적인 주파수 경험",
+    "한 문장의 바람을 입력하면 Vibra가 감정의 결을 읽고 조용히 집중할 수 있는 3분 오디오로 정리합니다.",
 };
 
 export default function RootLayout({
@@ -15,9 +15,9 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className="scheme-light-dark bg-[radial-gradient(circle_at_50%_10%,rgba(153,180,255,0.26),transparent_22%),linear-gradient(180deg,#f7f9fd_0%,#f5f7fb_100%)] dark:bg-[radial-gradient(circle_at_50%_10%,rgba(130,158,255,0.2),transparent_22%),linear-gradient(180deg,#091221_0%,#07111f_100%)]"
+      className="bg-slate-100 dark:bg-slate-950"
     >
-      <body className="min-h-screen bg-[radial-gradient(circle_at_50%_0%,rgba(153,180,255,0.26),transparent_34%),radial-gradient(circle_at_100%_100%,rgba(93,121,201,0.18),transparent_34%),linear-gradient(180deg,#f7f9fd_0%,#f5f7fb_100%)] font-sans text-[#172033] antialiased dark:bg-[radial-gradient(circle_at_50%_0%,rgba(130,158,255,0.2),transparent_34%),radial-gradient(circle_at_100%_100%,rgba(157,189,255,0.12),transparent_34%),linear-gradient(180deg,#091221_0%,#07111f_100%)] dark:text-[#f2f6ff]">
+      <body className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.18),transparent_32%),linear-gradient(180deg,#f5f7fb_0%,#eef2f7_100%)] font-sans text-slate-950 antialiased dark:bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.12),transparent_24%),linear-gradient(180deg,#020617_0%,#0f172a_100%)] dark:text-slate-50">
         {children}
       </body>
     </html>

@@ -1,78 +1,66 @@
-export const textPrimary = "text-[#172033] dark:text-[#f2f6ff]";
+import { cn } from "@/shared/lib/cn";
 
-export const textSecondary =
-  "text-[rgba(23,32,51,0.7)] dark:text-[rgba(242,246,255,0.76)]";
+export const textPrimary = "text-slate-950 dark:text-slate-50";
 
-export const textTertiary =
-  "text-[rgba(23,32,51,0.5)] dark:text-[rgba(242,246,255,0.52)]";
+export const textSecondary = "text-slate-600 dark:text-slate-300/82";
 
-export const subtleBorder =
-  "border-[rgba(110,128,160,0.18)] dark:border-[rgba(176,202,255,0.16)]";
+export const textTertiary = "text-slate-500 dark:text-slate-400/78";
 
-export const strongBorder =
-  "border-[rgba(97,119,155,0.28)] dark:border-[rgba(190,214,255,0.28)]";
+export const subtleBorder = "border-slate-200/80 dark:border-white/10";
 
-export const glassCard = [
-  "border",
+export const strongBorder = "border-slate-300/90 dark:border-white/16";
+
+export const lineBorder = subtleBorder;
+
+export const glassCard = cn(
+  "rounded-[28px] border bg-white/88 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl",
+  "dark:bg-slate-950/72 dark:shadow-[0_28px_90px_rgba(2,6,23,0.48)]",
   subtleBorder,
-  "rounded-[24px] bg-linear-[180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.74)]",
-  "shadow-[0_34px_80px_rgba(128,142,172,0.22)] backdrop-blur-[22px]",
-  "dark:bg-linear-[180deg,rgba(13,22,38,0.9),rgba(13,22,38,0.74)]",
-  "dark:shadow-[0_36px_96px_rgba(1,7,20,0.44)] sm:rounded-[28px]",
-].join(" ");
+);
 
-export const overlayPanel = [
-  "border",
+export const overlayPanel = cn(
+  "rounded-[24px] border bg-white/72 backdrop-blur-md",
+  "dark:bg-white/[0.03]",
   subtleBorder,
-  "rounded-[22px] bg-[rgba(255,255,255,0.58)]",
-  "dark:bg-[rgba(255,255,255,0.04)]",
-].join(" ");
+);
 
-export const softPanel = [
-  overlayPanel,
-  "backdrop-blur-[16px] shadow-[0_24px_60px_rgba(134,148,176,0.16)]",
-  "dark:shadow-[0_28px_70px_rgba(1,7,20,0.34)]",
-].join(" ");
-
-export const inputSurface = [
-  "w-full min-h-[208px] resize-y rounded-[24px] border px-[1.1rem] py-[1.15rem]",
+export const softPanel = cn(
+  "rounded-[22px] border bg-slate-50/88",
+  "dark:bg-white/[0.04]",
   subtleBorder,
-  textPrimary,
-  "bg-linear-[180deg,rgba(239,243,251,0.92),rgba(239,243,251,0.85)]",
-  "shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] outline-none",
-  "placeholder:text-[rgba(23,32,51,0.5)]",
-  "transition-[border-color,box-shadow,background] duration-200",
-  "focus:border-[#5d79c9] focus:shadow-[0_0_0_4px_rgba(93,121,201,0.16)]",
-  "dark:bg-linear-[180deg,rgba(4,12,23,0.92),rgba(4,12,23,0.85)]",
-  "dark:placeholder:text-[rgba(242,246,255,0.52)]",
-  "dark:focus:border-[#9dbdff] dark:focus:shadow-[0_0_0_4px_rgba(157,189,255,0.16)]",
-].join(" ");
+);
 
-export const primaryButton = [
-  "min-h-12 rounded-full border px-[1.4rem] py-[0.95rem] text-sm font-semibold text-white",
-  "border-[rgba(93,121,201,0.44)] bg-linear-[180deg,#7391dd,#4763b6]",
-  "shadow-[0_10px_22px_rgba(93,121,201,0.26)] transition",
-  "duration-200 hover:-translate-y-px hover:border-[rgba(93,121,201,0.56)]",
-  "hover:shadow-[0_12px_26px_rgba(93,121,201,0.32)] active:translate-y-0",
-  "disabled:cursor-not-allowed disabled:opacity-[0.62] disabled:shadow-none",
-  "motion-reduce:transform-none motion-reduce:transition-none",
-].join(" ");
-
-export const secondaryButton = [
-  "inline-flex min-h-12 min-w-40 items-center justify-center rounded-full border px-[1.2rem]",
-  "py-[0.85rem] font-semibold no-underline transition duration-200",
+export const inputSurface = cn(
+  "w-full min-h-[220px] resize-y rounded-[24px] border px-5 py-4 text-[15px] leading-7 outline-none transition",
+  "bg-white text-slate-950 placeholder:text-slate-400",
+  "focus:border-sky-500 focus:ring-4 focus:ring-sky-500/12",
+  "dark:bg-slate-950/80 dark:text-slate-50 dark:placeholder:text-slate-500",
+  "dark:focus:border-sky-300 dark:focus:ring-sky-300/12",
   strongBorder,
-  textPrimary,
-  "bg-[rgba(255,255,255,0.58)] hover:-translate-y-px",
-  "hover:border-[#5d79c9] hover:bg-[rgba(93,121,201,0.14)]",
-  "dark:bg-[rgba(255,255,255,0.04)] dark:hover:border-[#9dbdff]",
-  "dark:hover:bg-[rgba(157,189,255,0.12)] motion-reduce:transform-none",
-  "motion-reduce:transition-none",
-].join(" ");
+);
 
-export const errorPanel = [
-  "rounded-[18px] border px-4 py-[0.95rem] leading-6",
-  "border-[rgba(179,58,67,0.3)] bg-[rgba(179,58,67,0.12)] text-[#b33a43]",
-  "dark:border-[rgba(255,214,216,0.3)] dark:bg-[rgba(108,24,35,0.32)]",
-  "dark:text-[#ffd6d8]",
-].join(" ");
+export const primaryButton = cn(
+  "inline-flex min-h-12 items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition",
+  "bg-slate-950 text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-slate-950/12",
+  "disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500",
+  "dark:bg-sky-200 dark:text-slate-950 dark:hover:bg-sky-100 dark:focus-visible:ring-sky-200/20 dark:disabled:bg-slate-700 dark:disabled:text-slate-400",
+);
+
+export const secondaryButton = cn(
+  "inline-flex min-h-12 items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold transition",
+  "bg-white text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-slate-950/10",
+  "dark:bg-white/[0.04] dark:text-slate-100 dark:hover:bg-white/[0.08] dark:focus-visible:ring-white/10",
+  strongBorder,
+);
+
+export const badge = cn(
+  "inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold tracking-[0.02em]",
+  "bg-white/82 text-slate-600 dark:bg-white/[0.05] dark:text-slate-300/85",
+  subtleBorder,
+);
+
+export const errorPanel = cn(
+  "rounded-[20px] border px-4 py-3 text-sm leading-6",
+  "border-rose-200 bg-rose-50 text-rose-700",
+  "dark:border-rose-400/25 dark:bg-rose-500/10 dark:text-rose-200",
+);
