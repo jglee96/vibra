@@ -6,10 +6,10 @@ function rounded(value: number) {
 }
 
 export function normalizeAudioRecipe(input: AudioHints): AudioRecipe {
-  const baseHz = rounded(clamp(input.baseHz, 108, 196));
+  const baseHz = rounded(clamp(input.baseHz, 84, 248));
   const binauralOffsetHz = rounded(clamp(input.binauralOffsetHz, 1.5, 8));
   const pulseHz =
-    input.pulseHz === undefined ? undefined : rounded(clamp(input.pulseHz, 0.08, 0.6));
+    input.pulseHz === undefined ? undefined : rounded(clamp(input.pulseHz, 0.08, 0.92));
   const reverbMix = rounded(clamp(input.reverbMix, 0.08, 0.28));
   const weights = input.droneWeights.map((weight) => clamp(weight, 0.04, 0.22));
   const harmonicBlend = rounded(clamp(input.harmonicBlend, 0.08, 0.72));

@@ -35,13 +35,59 @@ function inferLanguage(wish: string) {
   return "unknown";
 }
 
+function detectWishIntent(wish: string) {
+  return {
+    seeksEnergy:
+      /활기|활력|에너지|생기|개운|상쾌|기운|awake|energy|energized|lively|vital|vibrant|refresh/i.test(
+        wish,
+      ),
+    seeksFocus:
+      /집중|공부|합격|작업|성과|focus|study|exam|work|flow|performance/i.test(wish),
+    seeksSleep:
+      /잠|숙면|잘 자|수면|불면|잠들|sleep|restful|deep sleep|insomnia|bedtime/i.test(wish),
+  };
+}
+
 function createFallbackProfile(wish: string): WishEmotionProfile {
   const normalizedWish = wish.trim();
   const lowerWish = normalizedWish.toLowerCase();
+  const intent = detectWishIntent(wish);
   const includesLove = /연애|매력|인기|호감|love|romance|relationship|attract|charisma/i.test(wish);
-  const includesFocus = /집중|합격|공부|성과|focus|study|exam|work|flow|performance/i.test(wish);
+  const includesFocus = intent.seeksFocus;
   const includesAnxiety = /불안|초조|긴장|걱정|stress|anxious|anxiety|nervous/i.test(wish);
   const includesLowMood = /우울|가라앉|무기력|슬픔|depress|sad|empty|drained/i.test(lowerWish);
+
+  if (intent.seeksSleep) {
+    return {
+      emotionLabels: ["졸림", "이완 욕구", "고요함"],
+      vad: {
+        valence: includesAnxiety ? 0.36 : 0.52,
+        arousal: includesAnxiety ? 0.24 : 0.14,
+      },
+      dominance: includesAnxiety ? 0.28 : 0.44,
+      intent: ["수면", "이완", "회복"],
+      imagery: ["어두운 방", "느린 숨", "잔잔한 밤공기"],
+      ambiguity: 0.14,
+      confidence: 0.8,
+      language: inferLanguage(wish),
+    };
+  }
+
+  if (intent.seeksEnergy) {
+    return {
+      emotionLabels: ["활기", "상승감", "생동감"],
+      vad: {
+        valence: 0.72,
+        arousal: 0.74,
+      },
+      dominance: 0.68,
+      intent: ["활력", "기상", "추진력"],
+      imagery: ["아침 햇빛", "시원한 공기", "가벼운 리듬"],
+      ambiguity: 0.12,
+      confidence: 0.78,
+      language: inferLanguage(wish),
+    };
+  }
 
   if (includesFocus) {
     return {
@@ -162,18 +208,25 @@ function normalizeWishEmotionProfile(
 }
 
 function selectRegulationTarget(profile: WishEmotionProfile, wish: string): RegulationTarget {
+  const intent = detectWishIntent(wish);
   const normalizedWish = wish.toLowerCase();
   const joinedSignals = `${normalizedWish} ${profile.intent.join(" ")} ${profile.emotionLabels.join(" ")}`;
-  const seeksFocus = /집중|공부|합격|작업|성과|focus|study|exam|work|flow|performance/.test(
-    joinedSignals,
-  );
+  const seeksFocus = intent.seeksFocus || /집중|공부|합격|작업|성과|focus|study|exam|work|flow|performance/.test(joinedSignals);
   const lowValence = profile.vad.valence < 0.42;
   const highArousal = profile.vad.arousal > 0.65;
   const lowArousal = profile.vad.arousal < 0.33;
   const lowDominance = profile.dominance < 0.4;
 
+  if (intent.seeksSleep) {
+    return "soothe";
+  }
+
   if (seeksFocus) {
     return "focus";
+  }
+
+  if (intent.seeksEnergy) {
+    return "uplift";
   }
 
   if (highArousal && lowValence) {
@@ -198,7 +251,9 @@ function blendTowardTarget(current: number, target: number, weight: number) {
 function buildMusicControlProfile(
   profile: WishEmotionProfile,
   regulationTarget: RegulationTarget,
+  wish: string,
 ): MusicControlProfile {
+  const intent = detectWishIntent(wish);
   const anchors: Record<RegulationTarget, { valence: number; arousal: number }> = {
     soothe: { valence: 0.58, arousal: 0.28 },
     stabilize: { valence: 0.5, arousal: 0.38 },
@@ -211,6 +266,34 @@ function buildMusicControlProfile(
     valence: blendTowardTarget(profile.vad.valence, anchor.valence, 0.55),
     arousal: blendTowardTarget(profile.vad.arousal, anchor.arousal, 0.62),
   };
+
+  if (intent.seeksSleep) {
+    return {
+      targetVad: {
+        valence: blendTowardTarget(targetVad.valence, 0.52, 0.48),
+        arousal: blendTowardTarget(targetVad.arousal, 0.14, 0.82),
+      },
+      tempoDensity: "still",
+      modeColor: "minor",
+      spectralBrightness: "dim",
+      rhythmicPulse: "none",
+      spaciousness: "wide",
+    };
+  }
+
+  if (intent.seeksEnergy) {
+    return {
+      targetVad: {
+        valence: blendTowardTarget(targetVad.valence, 0.78, 0.72),
+        arousal: blendTowardTarget(targetVad.arousal, 0.76, 0.82),
+      },
+      tempoDensity: "flowing",
+      modeColor: "major",
+      spectralBrightness: "bright",
+      rhythmicPulse: "steady",
+      spaciousness: "open",
+    };
+  }
 
   const tempoDensity =
     regulationTarget === "focus" ? "flowing" : targetVad.arousal < 0.34 ? "still" : "steady";
@@ -289,29 +372,52 @@ function buildListeningGuide(regulationTarget: RegulationTarget) {
 function buildAudioHints(musicControlProfile: MusicControlProfile): AudioHints {
   const { targetVad } = musicControlProfile;
 
+  const isSleepProfile =
+    musicControlProfile.tempoDensity === "still" &&
+    musicControlProfile.rhythmicPulse === "none" &&
+    musicControlProfile.spectralBrightness === "dim";
+  const isEnergyProfile =
+    musicControlProfile.tempoDensity === "flowing" &&
+    musicControlProfile.rhythmicPulse === "steady" &&
+    musicControlProfile.spectralBrightness === "bright";
+
   const baseHz = Number(
     (
-      104 +
-      targetVad.valence * 56 +
-      targetVad.arousal * 28 +
-      (musicControlProfile.modeColor === "major"
-        ? 18
-        : musicControlProfile.modeColor === "minor"
-          ? -8
-          : musicControlProfile.modeColor === "open"
-            ? 10
-            : 2)
+      (isSleepProfile
+        ? 78 +
+          targetVad.valence * 18 +
+          targetVad.arousal * 12 +
+          (musicControlProfile.modeColor === "minor" ? -6 : 0)
+        : isEnergyProfile
+          ? 152 +
+            targetVad.valence * 54 +
+            targetVad.arousal * 32 +
+            (musicControlProfile.modeColor === "major" ? 12 : 0)
+          : 104 +
+            targetVad.valence * 56 +
+            targetVad.arousal * 28 +
+            (musicControlProfile.modeColor === "major"
+              ? 18
+              : musicControlProfile.modeColor === "minor"
+                ? -8
+                : musicControlProfile.modeColor === "open"
+                  ? 10
+                  : 2))
     ).toFixed(3),
   );
   const binauralOffsetHz = Number(
     (
-      2.2 +
-      targetVad.arousal * 2.4 +
-      (musicControlProfile.rhythmicPulse === "steady"
-        ? 0.8
-        : musicControlProfile.rhythmicPulse === "gentle"
-          ? 0.35
-          : 0)
+      (isSleepProfile
+        ? 1.6 + targetVad.arousal * 1.4
+        : isEnergyProfile
+          ? 3 + targetVad.arousal * 3.2 + 1.1
+          : 2.2 +
+            targetVad.arousal * 2.4 +
+            (musicControlProfile.rhythmicPulse === "steady"
+              ? 0.8
+              : musicControlProfile.rhythmicPulse === "gentle"
+                ? 0.35
+                : 0))
     ).toFixed(3),
   );
   const pulseHz =
@@ -319,8 +425,10 @@ function buildAudioHints(musicControlProfile: MusicControlProfile): AudioHints {
       ? undefined
       : Number(
           (
-            (musicControlProfile.rhythmicPulse === "steady" ? 0.24 : 0.15) +
-            targetVad.arousal * 0.24
+            (isEnergyProfile
+              ? 0.42 + targetVad.arousal * 0.34
+              : (musicControlProfile.rhythmicPulse === "steady" ? 0.24 : 0.15) +
+                targetVad.arousal * 0.24)
           ).toFixed(3),
         );
   const reverbMix = Number(
@@ -350,26 +458,36 @@ function buildAudioHints(musicControlProfile: MusicControlProfile): AudioHints {
   ) as [number, number, number];
   const harmonicBlend = Number(
     (
-      (musicControlProfile.modeColor === "open"
-        ? 0.42
-        : musicControlProfile.modeColor === "major"
-          ? 0.38
-          : musicControlProfile.modeColor === "minor"
-            ? 0.22
-            : 0.28) +
+      (isSleepProfile
+        ? 0.14
+        : isEnergyProfile
+          ? 0.48
+          : musicControlProfile.modeColor === "open"
+            ? 0.42
+            : musicControlProfile.modeColor === "major"
+              ? 0.38
+              : musicControlProfile.modeColor === "minor"
+                ? 0.22
+                : 0.28) +
       (musicControlProfile.spectralBrightness === "bright" ? 0.12 : 0) -
       (musicControlProfile.spectralBrightness === "dim" ? 0.06 : 0)
     ).toFixed(3),
   );
   const motionDepth = Number(
     (
-      (musicControlProfile.tempoDensity === "flowing"
-        ? 0.44
-        : musicControlProfile.tempoDensity === "steady"
-          ? 0.3
-          : 0.18) +
+      (isSleepProfile
+        ? 0.1
+        : isEnergyProfile
+          ? 0.62
+          : musicControlProfile.tempoDensity === "flowing"
+            ? 0.44
+            : musicControlProfile.tempoDensity === "steady"
+              ? 0.3
+              : 0.18) +
       (musicControlProfile.rhythmicPulse === "steady"
-        ? 0.14
+        ? isEnergyProfile
+          ? 0.2
+          : 0.14
         : musicControlProfile.rhythmicPulse === "gentle"
           ? 0.08
           : 0)
@@ -377,12 +495,16 @@ function buildAudioHints(musicControlProfile: MusicControlProfile): AudioHints {
   );
   const stereoDriftHz = Number(
     (
-      (musicControlProfile.spaciousness === "wide"
-        ? 0.16
-        : musicControlProfile.spaciousness === "open"
-          ? 0.11
-          : 0.07) +
-      targetVad.arousal * 0.04
+      (isSleepProfile
+        ? 0.06
+        : isEnergyProfile
+          ? 0.18
+          : musicControlProfile.spaciousness === "wide"
+            ? 0.16
+            : musicControlProfile.spaciousness === "open"
+              ? 0.11
+              : 0.07) +
+      targetVad.arousal * (isEnergyProfile ? 0.08 : 0.04)
     ).toFixed(3),
   );
   const texture =
@@ -452,7 +574,7 @@ function buildEvidenceTrace(
 export function buildEmotionEngine(aiWishAnalysis: AiWishAnalysis, wish: string) {
   const wishEmotionProfile = normalizeWishEmotionProfile(aiWishAnalysis.wishEmotionProfile, wish);
   const regulationTarget = selectRegulationTarget(wishEmotionProfile, wish);
-  const musicControlProfile = buildMusicControlProfile(wishEmotionProfile, regulationTarget);
+  const musicControlProfile = buildMusicControlProfile(wishEmotionProfile, regulationTarget, wish);
   const analysis = buildAnalysis(wishEmotionProfile, musicControlProfile, regulationTarget);
   const listeningGuide = buildListeningGuide(regulationTarget);
   const evidenceTrace = buildEvidenceTrace(
